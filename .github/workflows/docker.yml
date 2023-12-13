@@ -19,9 +19,27 @@ jobs:
       - name: build docker image
         run: |
           cd tools/docker/standalone
-          docker build --build-arg VERSION=4.2.1.0-100000102023092807 -t oceanbase-ce .
+          docker build -t oceanbase-ce .
       - name: start docker container
         timeout-minutes: 5
+        run: |
+          docker run --name ob-slim -p 2881:2881 -e MODE=slim -d oceanbase-ce
+          eval 'while ! docker logs ob-slim | grep -q "boot success!"; do echo "booting..."; sleep 10; done'
+          echo "boot success!"
+      - name: test docker container
+        run: docker exec ob-slim obclient -h127.0.0.1 -P2881 -uroot -e 'select version()'
+
+  fastboot:
+    name: fastboot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: build docker image
+        run: |
+          cd tools/docker/standalone
+          env MODE=STANDALONE ./fast_boot_docker_build.sh
+      - name: start docker container
+        timeout-minutes: 1
         run: |
           docker run --name ob-slim -p 2881:2881 -e MODE=slim -d oceanbase-ce
           eval 'while ! docker logs ob-slim | grep -q "boot success!"; do echo "booting..."; sleep 10; done'

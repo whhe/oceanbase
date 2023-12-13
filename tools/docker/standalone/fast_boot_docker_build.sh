@@ -18,7 +18,7 @@ function fast_boot_docker_build() {
     fi
 
     cd "${CWD}" && mkdir -p ${CWD}/boot/etc
-    docker run -it -v ${CWD}/boot:/root/dest raw_observer
+    docker run -v ${CWD}/boot:/root/dest raw_observer
     if [ $? == 0 ]; then
         echo "================== prepare docker run ok ==============="
     else
@@ -46,6 +46,7 @@ fi
 OS=`uname`
 cp ${TMP_INIT_STORE_PY_SCRIPT} ${ACTUAL_INIT_STORE_PY_SCRIPT}
 
+shopt -s expand_aliases
 if [ "$OS" == 'Darwin' ]; then
     alias sedi="sed -i '' -e"
 else
