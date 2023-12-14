@@ -123,7 +123,7 @@ if __name__ == "__main__":
             logging.info('create tenant success: %s ms' % ((create_tenant_end - create_tenant_begin).total_seconds() * 1000))
         db.close()
     except mysql.err.Error as e:
-        logging.warn("deploy observer failed")
+        logging.exception("deploy observer failed")
         kill_server()
         exit(-1)
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
         cursor.execute("GRANT ALL ON *.* TO '%s'@'%%'" % (args.tenant_name))
         logging.info("grant privilege success!")
     except mysql.err.Error as e:
-        logging.warn("grant privilege for common tenant failed")
+        logging.exception("grant privilege for common tenant failed")
         kill_server()
         exit(-1)
 
