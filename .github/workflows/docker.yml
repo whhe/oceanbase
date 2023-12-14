@@ -39,7 +39,7 @@ jobs:
           cd tools/docker/standalone
           env MODE=STANDALONE ./fast_boot_docker_build.sh
       - name: start docker container
-        timeout-minutes: 1
+        timeout-minutes: 2
         run: |
           docker run --name ob-slim -p 2881:2881 -e MODE=slim -d oceanbase-ce
           eval 'while ! docker logs ob-slim | grep -q "boot success!"; do echo "booting..."; sleep 10; done'
