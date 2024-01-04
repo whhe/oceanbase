@@ -50,12 +50,12 @@ if __name__ == "__main__":
     parser.add_argument("-r", dest="rootservice", type=str, default="@OB_SERVER_IP@:@OB_RPC_PORT@")
     parser.add_argument("-I", dest="ip", type=str, default="@OB_SERVER_IP@")
     parser.add_argument("-l", dest="log_level", type=str, default="INFO")
-    parser.add_argument("-o", dest="opt_str", type=str, default="__min_full_resource_pool_memory=2147483648,memory_limit=6G,system_memory=1G,datafile_size=256M,log_disk_size=5G,cpu_count=16")
+    parser.add_argument("-o", dest="opt_str", type=str, default="__min_full_resource_pool_memory=2147483648,memory_limit=6G,system_memory=1G,datafile_size=256M,log_disk_size=5G,cpu_count=2")
     parser.add_argument("-N", dest="daemon", type=str, default="1")
     parser.add_argument("--tenant_name", type=str, default="@OB_TENANT_NAME@")
     parser.add_argument("--tenant_lower_case_table_names", type=int, default="@OB_TENANT_LOWER_CASE_TABLE_NAMES@")
-    parser.add_argument("--max_cpu", type=float, default=7.0)
-    parser.add_argument("--min_cpu", type=float, default=7.0)
+    parser.add_argument("--max_cpu", type=float, default=1.0)
+    parser.add_argument("--min_cpu", type=float, default=1.0)
     parser.add_argument("--memory_size", type=int, default=3221225472)
     parser.add_argument("--log_disk_size", type=int, default=3221225472)
     args = parser.parse_args()
@@ -123,7 +123,7 @@ if __name__ == "__main__":
             logging.info('create tenant success: %s ms' % ((create_tenant_end - create_tenant_begin).total_seconds() * 1000))
         db.close()
     except mysql.err.Error as e:
-        logging.warn("deploy observer failed")
+        logging.exception("deploy observer failed")
         kill_server()
         exit(-1)
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
         cursor.execute("GRANT ALL ON *.* TO '%s'@'%%'" % (args.tenant_name))
         logging.info("grant privilege success!")
     except mysql.err.Error as e:
-        logging.warn("grant privilege for common tenant failed")
+        logging.exception("grant privilege for common tenant failed")
         kill_server()
         exit(-1)
 

@@ -19,7 +19,7 @@ jobs:
       - name: build docker image
         run: |
           cd tools/docker/standalone
-          docker build -t oceanbase-ce .
+          ./docker_build.sh
       - name: start docker container
         timeout-minutes: 5
         run: |

@@ -27,7 +27,7 @@ function fast_boot_docker_build() {
     rm -rf boot
 
     cd "${CWD}" && mkdir -p ${CWD}/boot/etc
-    docker run -it -v ${CWD}/boot:/root/dest raw_observer
+    docker run -v ${CWD}/boot:/root/dest raw_observer
     if [ $? == 0 ]; then
         echo "================== prepare docker run ok ==============="
     else
